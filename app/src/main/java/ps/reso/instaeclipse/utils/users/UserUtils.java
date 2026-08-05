@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 
 public class UserUtils {
 
-    public static Method userUsernameGetter;
+    public static volatile Method userUsernameGetter;
 
     public static String callUsernameGetter(Object user) {
         if (user == null) return null;

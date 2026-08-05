@@ -1,59 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout android:fitsSystemWindows="true" android:layout_width="match_parent" android:layout_height="match_parent"
-  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
-    <com.google.android.material.appbar.AppBarLayout android:fitsSystemWindows="true" android:layout_width="match_parent" android:layout_height="wrap_content">
-        <com.google.android.material.appbar.MaterialToolbar android:id="@+id/theme_toolbar" android:layout_width="match_parent" android:layout_height="?actionBarSize"
-            app:navigationIcon="@drawable/ic_chevron_right" app:title="@string/theme_title" app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge" />
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/theme_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="@drawable/ic_chevron_right"
+            app:title="@string/theme_title"
+            app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView android:layout_width="match_parent" android:layout_height="match_parent"
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
-        <LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:paddingBottom="32.0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="32dp">
 
             <!-- Master enable switch -->
-            <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:layout_margin="16.0dp" app:cardCornerRadius="16.0dp" app:cardElevation="0.0dp" app:strokeWidth="1.0dp" app:strokeColor="?colorOutlineVariant">
-                <LinearLayout android:orientation="horizontal" android:gravity="center_vertical" android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:padding="16.0dp">
-                    <TextView android:layout_width="0.0dp" android:layout_height="wrap_content" android:layout_weight="1.0"
-                        android:text="@string/theme_enable" android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
-                    <com.google.android.material.materialswitch.MaterialSwitch android:id="@+id/theme_enable_switch"
-                        android:layout_width="wrap_content" android:layout_height="wrap_content" />
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:strokeColor="?attr/colorOutlineVariant"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:minHeight="56dp"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/theme_enable"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/theme_enable_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minHeight="48dp" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <!-- Presets section -->
-            <LinearLayout android:id="@+id/theme_presets_header" android:orientation="horizontal" android:gravity="center_vertical"
-                android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingStart="20.0dp" android:paddingEnd="20.0dp"
-                android:paddingTop="8.0dp" android:paddingBottom="8.0dp" android:background="?selectableItemBackground" android:clickable="true" android:focusable="true">
-                <TextView android:layout_width="0.0dp" android:layout_height="wrap_content" android:layout_weight="1.0"
-                    android:text="@string/theme_section_presets" android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
-                <ImageView android:id="@+id/theme_presets_expand_icon" android:layout_width="24.0dp" android:layout_height="24.0dp"
-                    android:src="@drawable/ic_expand_less" android:contentDescription="@string/theme_collapse_section" />
+            <LinearLayout
+                android:id="@+id/theme_presets_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:minHeight="48dp"
+                android:orientation="horizontal"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="10dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/theme_section_presets"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+
+                <ImageView
+                    android:id="@+id/theme_presets_expand_icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="@string/theme_collapse_section"
+                    android:src="@drawable/ic_expand_less"
+                    app:tint="?attr/colorOnSurface" />
             </LinearLayout>
-            <LinearLayout android:id="@+id/theme_presets_content" android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content">
-                <androidx.recyclerview.widget.RecyclerView android:id="@+id/theme_preset_list" android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:paddingStart="12.0dp" android:paddingEnd="12.0dp" android:clipToPadding="false" android:nestedScrollingEnabled="false" />
+
+            <LinearLayout
+                android:id="@+id/theme_presets_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/theme_preset_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:paddingHorizontal="12dp" />
             </LinearLayout>
 
             <!-- Custom colors section -->
-            <LinearLayout android:id="@+id/theme_custom_header" android:orientation="horizontal" android:gravity="center_vertical"
-                android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingStart="20.0dp" android:paddingEnd="20.0dp"
-                android:paddingTop="16.0dp" android:paddingBottom="8.0dp" android:background="?selectableItemBackground" android:clickable="true" android:focusable="true">
-                <TextView android:layout_width="0.0dp" android:layout_height="wrap_content" android:layout_weight="1.0"
-                    android:text="@string/theme_section_custom" android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
-                <ImageView android:id="@+id/theme_custom_expand_icon" android:layout_width="24.0dp" android:layout_height="24.0dp"
-                    android:src="@drawable/ic_expand_less" android:contentDescription="@string/theme_collapse_section" />
+            <LinearLayout
+                android:id="@+id/theme_custom_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:minHeight="48dp"
+                android:orientation="horizontal"
+                android:paddingHorizontal="20dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="10dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/theme_section_custom"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+
+                <ImageView
+                    android:id="@+id/theme_custom_expand_icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:contentDescription="@string/theme_collapse_section"
+                    android:src="@drawable/ic_expand_less"
+                    app:tint="?attr/colorOnSurface" />
             </LinearLayout>
-            <LinearLayout android:id="@+id/theme_custom_content" android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content">
-                <androidx.recyclerview.widget.RecyclerView android:id="@+id/theme_color_slots" android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:paddingStart="16.0dp" android:paddingEnd="16.0dp" android:clipToPadding="false" android:nestedScrollingEnabled="false" />
-                <com.google.android.material.button.MaterialButton android:id="@+id/theme_reset_custom" android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:layout_margin="16.0dp" android:text="@string/theme_reset_custom" style="@style/Widget.Material3.Button.TonalButton" />
+
+            <LinearLayout
+                android:id="@+id/theme_custom_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/theme_color_slots"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:paddingHorizontal="16dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/theme_reset_custom"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:minHeight="48dp"
+                    android:text="@string/theme_reset_custom"
+                    app:cornerRadius="16dp" />
             </LinearLayout>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+

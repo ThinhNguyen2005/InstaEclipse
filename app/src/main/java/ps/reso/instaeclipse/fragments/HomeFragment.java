@@ -117,8 +117,11 @@ public class HomeFragment extends Fragment {
         if (installedPackages.isEmpty()) {
             instagramStatusText.setText(getString(R.string.not_installed_instagram));
             instagramStatusText.setTypeface(null, android.graphics.Typeface.BOLD);
-            instagramStatusCard.setCardBackgroundColor(getResources().getColor(R.color.dark_red));
+            instagramStatusCard.setCardBackgroundColor(requireContext().getColor(R.color.status_error_container));
+            instagramStatusText.setTextColor(requireContext().getColor(R.color.status_on_error_container));
             instagramLogo.setImageResource(R.drawable.ic_cancel);
+            instagramLogo.setImageTintList(android.content.res.ColorStateList.valueOf(requireContext().getColor(R.color.status_on_error_container)));
+            instagramInfoIcon.setImageTintList(android.content.res.ColorStateList.valueOf(requireContext().getColor(R.color.status_on_error_container)));
             launchInstagramButton.setEnabled(false);
             return;
         }
@@ -128,8 +131,12 @@ public class HomeFragment extends Fragment {
                 ? CommonUtils.IG_PACKAGE_NAME
                 : installedPackages.get(0);
 
-        instagramStatusCard.setCardBackgroundColor(getResources().getColor(R.color.green));
+        instagramStatusCard.setCardBackgroundColor(requireContext().getColor(R.color.status_success_container));
+        instagramStatusText.setTextColor(requireContext().getColor(R.color.status_on_success_container));
         instagramLogo.setImageResource(R.drawable.ic_instagram_logo);
+        instagramLogo.setImageTintList(android.content.res.ColorStateList.valueOf(requireContext().getColor(R.color.status_on_success_container)));
+        instagramInfoIcon.setImageTintList(android.content.res.ColorStateList.valueOf(requireContext().getColor(R.color.status_on_success_container)));
+        instagramVariantText.setTextColor(requireContext().getColor(R.color.status_on_success_container));
         instagramVariantText.setVisibility(View.VISIBLE);
 
         if (installedPackages.size() > 1) {

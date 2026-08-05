@@ -89,6 +89,10 @@ public class GhostDMMarkAsReadHook {
 
         ghostBtn.setLayoutParams(lp);
         ghostBtn.setOnClickListener(v -> triggerSeenLogic(parent));
+        ghostBtn.setOnLongClickListener(v -> {
+            Toast.makeText(ctx, "👁️ " + I18n.t(ctx, R.string.ig_toast_seen_sent), Toast.LENGTH_SHORT).show();
+            return true;
+        });
 
         parent.post(() -> {
             parent.addView(ghostBtn, 3);

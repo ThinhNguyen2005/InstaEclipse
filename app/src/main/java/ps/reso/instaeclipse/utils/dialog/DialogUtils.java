@@ -76,22 +76,10 @@ public class DialogUtils {
         ScrollView scrollView = createScrollableContainer(context, mainLayout, 0.62f);
         outer.addView(scrollView);
 
-        // Pinned footer: Close button (always reachable without scrolling)
-        TextView closeButton = new TextView(context);
-        closeButton.setText(I18n.t(context, R.string.ig_dialog_close));
-        closeButton.setTextColor(Color.parseColor("#FF453A"));
-        closeButton.setTextSize(16);
-        closeButton.setPadding(40, 20, 40, 40);
-        closeButton.setGravity(Gravity.CENTER);
-        closeButton.setTypeface(null, Typeface.BOLD);
-        StateListDrawable closeStates = new StateListDrawable();
-        closeStates.addState(new int[]{android.R.attr.state_pressed}, new ColorDrawable(Color.parseColor("#20FF453A")));
-        closeStates.addState(new int[]{}, new ColorDrawable(Color.TRANSPARENT));
-        closeButton.setBackground(closeStates);
-        closeButton.setOnClickListener(v -> {
+        // Pinned footer: Close button — pill-shaped, icon + label
+        outer.addView(createCloseButton(context, () -> {
             if (currentDialog != null) { try { currentDialog.dismiss(); } catch (Exception ignored) {} currentDialog = null; }
-        });
-        outer.addView(closeButton);
+        }));
 
         SettingsManager.saveAllFlags();
 
@@ -205,10 +193,13 @@ public class DialogUtils {
         labelView.setTextColor(Color.WHITE);
         labelView.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
 
-        TextView chevron = new TextView(context);
-        chevron.setText("›");
-        chevron.setTextSize(20);
-        chevron.setTextColor(Color.parseColor("#8E8E93"));
+        // Chevron: use real vector icon for visual consistency across all rows
+        android.widget.ImageView chevron = new android.widget.ImageView(context);
+        Drawable chevronIcon = loadModuleIcon(R.drawable.ic_chevron_right, Color.parseColor("#8E8E93"));
+        if (chevronIcon != null) chevron.setImageDrawable(chevronIcon);
+        chevron.setScaleType(android.widget.ImageView.ScaleType.CENTER_INSIDE);
+        LinearLayout.LayoutParams chevronLp = new LinearLayout.LayoutParams(dp(context, 20), dp(context, 20));
+        chevron.setLayoutParams(chevronLp);
 
         row.addView(buildIconChip(context, iconRes, accentHex));
         row.addView(labelView);
@@ -1605,6 +1596,53 @@ public class DialogUtils {
 
         wrapper.addView(handle);
         return wrapper;
+    }
+
+    /** Pill-shaped Close button pinned at the bottom of bottom-sheet dialogs.
+     *  Displays a ✕ icon chip + bold label. Press ripple color matches destructive red. */
+    private static View createCloseButton(Context context, Runnable onClose) {
+        LinearLayout container = new LinearLayout(context);
+        container.setOrientation(LinearLayout.HORIZONTAL);
+        container.setGravity(Gravity.CENTER);
+        container.setClickable(true);
+        container.setFocusable(true);
+        container.setPadding(0, 16, 0, 36);
+
+        // Pill background with press ripple
+        StateListDrawable bg = new StateListDrawable();
+        GradientDrawable pressed = new GradientDrawable();
+        pressed.setColor(Color.parseColor(\"#30FF453A\"));
+        pressed.setCornerRadius(999);
+        bg.addState(new int[]{android.R.attr.state_pressed}, pressed);
+        bg.addState(new int[]{}, new ColorDrawable(Color.TRANSPARENT));
+        container.setBackground(bg);
+
+        // ✕ icon chip
+        android.widget.ImageView iconView = new android.widget.ImageView(context);
+        Drawable closeIcon = loadModuleIcon(R.drawable.ic_close, Color.parseColor(\"#FF453A\"));
+        if (closeIcon != null) iconView.setImageDrawable(closeIcon);
+        iconView.setScaleType(android.widget.ImageView.ScaleType.CENTER_INSIDE);
+        int pad = dp(context, 6);
+        iconView.setPadding(pad, pad, pad, pad);
+        GradientDrawable iconBg = new GradientDrawable();
+        iconBg.setColor(Color.parseColor(\"#22FF453A\"));
+        iconBg.setCornerRadius(dp(context, 10));
+        iconView.setBackground(iconBg);
+        LinearLayout.LayoutParams iconLp = new LinearLayout.LayoutParams(dp(context, 32), dp(context, 32));
+        iconLp.rightMargin = dp(context, 8);
+        iconView.setLayoutParams(iconLp);
+
+        // Label
+        TextView label = new TextView(context);
+        label.setText(I18n.t(context, R.string.ig_dialog_close));
+        label.setTextColor(Color.parseColor(\"#FF453A\"));
+        label.setTextSize(16);
+        label.setTypeface(null, Typeface.BOLD);
+
+        container.addView(iconView);
+        container.addView(label);
+        container.setOnClickListener(v -> onClose.run());
+        return container;
     }
 
     /**

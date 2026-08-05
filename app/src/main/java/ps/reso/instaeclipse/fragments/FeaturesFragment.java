@@ -63,8 +63,6 @@ public class FeaturesFragment extends Fragment {
     private View fragmentView;
     private RecyclerView recyclerFeatures;
     private FeatureAdapter adapter;
-    private TextView tvHeaderTitle;
-    private ImageButton btnBack;
     private ExtendedFloatingActionButton fabSave;
     private ActivityResultLauncher<Uri> dirPickerLauncher;
     private ActivityResultLauncher<String[]> restoreFileLauncher;
@@ -246,11 +244,7 @@ public class FeaturesFragment extends Fragment {
         adapter = new FeatureAdapter();
         recyclerFeatures.setAdapter(adapter);
 
-        tvHeaderTitle = fragmentView.findViewById(R.id.tv_header_title);
-        btnBack = fragmentView.findViewById(R.id.btn_back);
         fabSave = fragmentView.findViewById(R.id.fab_save);
-
-        btnBack.setOnClickListener(v -> loadMainMenu());
 
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
             @Override
@@ -555,12 +549,6 @@ public class FeaturesFragment extends Fragment {
     // =========================================================
 
     private void showMenu(String title, List<Object> definitions) {
-        ViewGroup headerLayout = fragmentView.findViewById(R.id.header_layout);
-        TransitionManager.beginDelayedTransition(headerLayout, new AutoTransition().setDuration(200));
-
-        tvHeaderTitle.setText(title);
-        btnBack.setVisibility(title.equals(getString(R.string.features)) ? View.GONE : View.VISIBLE);
-
         List<FeatureItem> displayList = new ArrayList<>();
         for (int di = 0; di < definitions.size(); di++) {
             Object def = definitions.get(di);

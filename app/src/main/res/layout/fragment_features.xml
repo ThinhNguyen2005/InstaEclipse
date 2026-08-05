@@ -1,69 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSurface">
 
-    <!-- AppBarLayout with lift-on-scroll + hide-on-scroll behavior -->
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorSurface"
-        app:liftOnScroll="true"
-        app:liftOnScrollTargetViewId="@+id/recycler_features">
-
-        <LinearLayout
-            android:id="@+id/header_layout"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:orientation="horizontal"
-            android:paddingHorizontal="8dp"
-            android:gravity="center_vertical"
-            app:layout_scrollFlags="scroll|enterAlways|snap">
-
-            <ImageButton
-                android:id="@+id/btn_back"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_arrow_back"
-                android:visibility="gone"
-                android:contentDescription="@string/back"
-                app:tint="?attr/colorOnSurface" />
-
-            <TextView
-                android:id="@+id/tv_header_title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/features"
-                android:textAppearance="?attr/textAppearanceTitleMedium"
-                android:textStyle="bold"
-                android:layout_marginStart="8dp" />
-
-        </LinearLayout>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <!-- RecyclerView coordinated with AppBar scroll -->
+    <!-- Recycler view without topbar or scrolling animations -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_features"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:paddingHorizontal="16dp"
+        android:paddingTop="12dp"
         android:paddingBottom="120dp"
         android:clipToPadding="false" />
 
-    <!-- FAB stays above bottom nav -->
+    <!-- FAB stays at bottom right -->
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fab_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
         android:text="@string/apply_changes"
@@ -72,4 +31,4 @@
         app:icon="@drawable/ic_save"
         android:visibility="gone" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</RelativeLayout>

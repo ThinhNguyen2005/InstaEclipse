@@ -55,19 +55,20 @@ public class DialogUtils {
         outer.setOrientation(LinearLayout.VERTICAL);
 
         GradientDrawable background = new GradientDrawable();
-        background.setColor(Color.parseColor("#1C1C1E"));
-        background.setCornerRadii(new float[]{40, 40, 40, 40, 0, 0, 0, 0});
+        background.setColor(Color.parseColor("#141416")); // Modern deep dark surface
+        background.setCornerRadii(new float[]{48, 48, 48, 48, 0, 0, 0, 0});
+        background.setStroke(dp(context, 1), Color.parseColor("#2A2A2E")); // Subtle top border accent
         outer.setBackground(background);
 
-        // Pinned header: drag handle + title (stays visible while the list below scrolls)
+        // Pinned header: drag handle + title
         outer.addView(createDragHandle(context));
         TextView title = new TextView(context);
         title.setText(I18n.t(context, R.string.ig_dialog_title));
         title.setTextColor(Color.WHITE);
-        title.setTextSize(20);
-        title.setTypeface(null, Typeface.BOLD);
+        title.setTextSize(21);
+        title.setTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD));
         title.setGravity(Gravity.CENTER);
-        title.setPadding(40, 8, 40, 20);
+        title.setPadding(40, 4, 40, 16);
         outer.addView(title);
         outer.addView(createDivider(context));
 
@@ -160,10 +161,11 @@ public class DialogUtils {
         LinearLayout group = new LinearLayout(context);
         group.setOrientation(LinearLayout.VERTICAL);
         GradientDrawable groupBg = new GradientDrawable();
-        groupBg.setColor(Color.parseColor("#2C2C2E"));
-        groupBg.setCornerRadius(20);
+        groupBg.setColor(Color.parseColor("#1F1F23")); // Modern card background
+        groupBg.setCornerRadius(24);
+        groupBg.setStroke(dp(context, 1), Color.parseColor("#2D2D34")); // Glass stroke outline
         group.setBackground(groupBg);
-        group.setPadding(6, 6, 6, 6);
+        group.setPadding(4, 4, 4, 4);
         return group;
     }
 
@@ -183,22 +185,23 @@ public class DialogUtils {
         row.setFocusable(true);
 
         StateListDrawable bg = new StateListDrawable();
-        bg.addState(new int[]{android.R.attr.state_pressed}, roundedColor(Color.parseColor("#3A3A3C"), 16));
+        bg.addState(new int[]{android.R.attr.state_pressed}, roundedColor(Color.parseColor("#2F2F35"), 18));
         bg.addState(new int[]{}, new ColorDrawable(Color.TRANSPARENT));
         row.setBackground(bg);
 
         TextView labelView = new TextView(context);
         labelView.setText(label);
-        labelView.setTextSize(16);
-        labelView.setTextColor(Color.WHITE);
+        labelView.setTextSize(15.5f);
+        labelView.setTextColor(Color.parseColor("#F0F0F5"));
+        labelView.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
         labelView.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
 
         // Chevron: use real vector icon for visual consistency across all rows
         android.widget.ImageView chevron = new android.widget.ImageView(context);
-        Drawable chevronIcon = loadModuleIcon(R.drawable.ic_chevron_right, Color.parseColor("#8E8E93"));
+        Drawable chevronIcon = loadModuleIcon(R.drawable.ic_chevron_right, Color.parseColor("#6E6E73"));
         if (chevronIcon != null) chevron.setImageDrawable(chevronIcon);
         chevron.setScaleType(android.widget.ImageView.ScaleType.CENTER_INSIDE);
-        LinearLayout.LayoutParams chevronLp = new LinearLayout.LayoutParams(dp(context, 20), dp(context, 20));
+        LinearLayout.LayoutParams chevronLp = new LinearLayout.LayoutParams(dp(context, 18), dp(context, 18));
         chevron.setLayoutParams(chevronLp);
 
         row.addView(buildIconChip(context, iconRes, accentHex));
@@ -1451,7 +1454,7 @@ public class DialogUtils {
         return new ToggleRow(context, iconRes, accentHex, label, defaultState);
     }
 
-    /** The same 36dp rounded, tinted icon chip used by the main menu's nav rows. */
+    /** The same 38dp rounded, glowing tinted icon chip used by the main menu's nav rows. */
     private static View buildIconChip(Context context, int iconRes, String accentHex) {
         android.widget.ImageView iconView = new android.widget.ImageView(context);
         int accent = Color.parseColor(accentHex);
@@ -1461,10 +1464,11 @@ public class DialogUtils {
         int iconPad = dp(context, 8);
         iconView.setPadding(iconPad, iconPad, iconPad, iconPad);
         GradientDrawable chipBg = new GradientDrawable();
-        chipBg.setColor((accent & 0x00FFFFFF) | 0x33000000);
-        chipBg.setCornerRadius(12);
+        chipBg.setColor((accent & 0x00FFFFFF) | 0x22000000); // 13% subtle glow tint
+        chipBg.setCornerRadius(dp(context, 12));
+        chipBg.setStroke(dp(context, 1), (accent & 0x00FFFFFF) | 0x44000000); // Soft outline accent
         iconView.setBackground(chipBg);
-        LinearLayout.LayoutParams iconLp = new LinearLayout.LayoutParams(dp(context, 36), dp(context, 36));
+        LinearLayout.LayoutParams iconLp = new LinearLayout.LayoutParams(dp(context, 38), dp(context, 38));
         iconLp.rightMargin = dp(context, 14);
         iconView.setLayoutParams(iconLp);
         return iconView;
@@ -1532,10 +1536,25 @@ public class DialogUtils {
     @SuppressLint("UseCompatLoadingForDrawables")
     private static Drawable loadModuleIcon(int iconRes, int tintColor) {
         try {
-            Drawable icon = android.content.res.XModuleResources.createInstance(Module.moduleSourceDir, null)
-                    .getDrawable(iconRes, null);
-            icon = icon.mutate();
-            icon.setColorFilter(new android.graphics.PorterDuffColorFilter(tintColor, android.graphics.PorterDuff.Mode.SRC_IN));
+            Context ctx = ps.reso.instaeclipse.mods.ui.UIHookManager.getCurrentActivity();
+            if (ctx == null) ctx = android.app.AndroidAppHelper.currentApplication();
+            
+            Drawable icon = null;
+            if (Module.moduleSourceDir != null) {
+                try {
+                    icon = android.content.res.XModuleResources.createInstance(Module.moduleSourceDir, null)
+                            .getDrawable(iconRes, null);
+                } catch (Throwable ignored) {}
+            }
+            if (icon == null && ctx != null) {
+                try {
+                    icon = androidx.core.content.ContextCompat.getDrawable(ctx, iconRes);
+                } catch (Throwable ignored) {}
+            }
+            if (icon != null) {
+                icon = icon.mutate();
+                icon.setColorFilter(new android.graphics.PorterDuffColorFilter(tintColor, android.graphics.PorterDuff.Mode.SRC_IN));
+            }
             return icon;
         } catch (Throwable ignored) {
             return null;
@@ -1611,7 +1630,7 @@ public class DialogUtils {
         // Pill background with press ripple
         StateListDrawable bg = new StateListDrawable();
         GradientDrawable pressed = new GradientDrawable();
-        pressed.setColor(Color.parseColor(\"#30FF453A\"));
+        pressed.setColor(Color.parseColor("#30FF453A"));
         pressed.setCornerRadius(999);
         bg.addState(new int[]{android.R.attr.state_pressed}, pressed);
         bg.addState(new int[]{}, new ColorDrawable(Color.TRANSPARENT));
@@ -1619,13 +1638,13 @@ public class DialogUtils {
 
         // ✕ icon chip
         android.widget.ImageView iconView = new android.widget.ImageView(context);
-        Drawable closeIcon = loadModuleIcon(R.drawable.ic_close, Color.parseColor(\"#FF453A\"));
+        Drawable closeIcon = loadModuleIcon(R.drawable.ic_close, Color.parseColor("#FF453A"));
         if (closeIcon != null) iconView.setImageDrawable(closeIcon);
         iconView.setScaleType(android.widget.ImageView.ScaleType.CENTER_INSIDE);
         int pad = dp(context, 6);
         iconView.setPadding(pad, pad, pad, pad);
         GradientDrawable iconBg = new GradientDrawable();
-        iconBg.setColor(Color.parseColor(\"#22FF453A\"));
+        iconBg.setColor(Color.parseColor("#22FF453A"));
         iconBg.setCornerRadius(dp(context, 10));
         iconView.setBackground(iconBg);
         LinearLayout.LayoutParams iconLp = new LinearLayout.LayoutParams(dp(context, 32), dp(context, 32));
@@ -1635,7 +1654,7 @@ public class DialogUtils {
         // Label
         TextView label = new TextView(context);
         label.setText(I18n.t(context, R.string.ig_dialog_close));
-        label.setTextColor(Color.parseColor(\"#FF453A\"));
+        label.setTextColor(Color.parseColor("#FF453A"));
         label.setTextSize(16);
         label.setTypeface(null, Typeface.BOLD);
 
